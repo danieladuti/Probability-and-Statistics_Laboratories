@@ -1,0 +1,13 @@
+#ex9
+geometric = function(n,p){
+  x=1:n;
+  y=dgeom(x,n,p);
+  barplot(x,space=0);
+}
+
+#ex 10
+poisson = function(n,l){
+  x=0:(n-1);
+  y=dpois(x,n,l);
+  barplot(y,space=0);
+}
