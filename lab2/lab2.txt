@@ -1,0 +1,49 @@
+Rezolvari de la laboratorul 2:
+
+#ex I.3
+tablou = read.csv("life_expect.csv", header = T, sep = ",")
+male = tablou[['male']]
+female = tablou[['female']]
+a = 7
+hist(male, breaks = a, right = T, col = "blue")
+hist(female, breaks = a, right = T, col = "pink")
+
+
+#ex III.3 
+sam = scan("sample2.txt")
+summary(sam)
+outliers_mean = function(sam)
+{
+  m = mean(sam)
+  s = sd(sam)
+  outliers = vector()
+  j = 0
+  for(i in 1:length(sam))
+    if(sam[i] <m - 2*s | sam[i] > m + 2*s) {
+      j = j + 1
+      outliers[j] = sam[i]
+    }
+  return (outliers)
+}
+
+outliers_iqr = function(sam)
+{
+  q1 = as.vector(quantile(sam))[2]
+  q3 = as.vector(quantile(sam))[4]
+  fqr = q3-q1
+  outliers = vector()
+  j = 0
+  for(i in 1:length(sam))
+    if(sam[i] <q1 - 2*fqr | sam[i] > q3 + 2*fqr) {
+      j = j + 1
+      outliers[j] = sam[i]
+    }
+  return (outliers)
+}
+
+outliers_iqr(sam)
+outliers_mean(sam)
+mean(sam)
+median(sam)
+sd(sam)
+var(sam)
