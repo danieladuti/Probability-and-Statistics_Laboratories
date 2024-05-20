@@ -1,12 +1,19 @@
 #ex1
-simulare_var_finita = function(valori, probabilitati, n) {
+simulare_var_finita = function(valori, probabilitati) {
   if(length(valori) == length(probabilitati) && sum(probabilitati) == 1) {
-    sample(valori, size = n, replace = TRUE, prob = probabilitati)
+   #sample(valori, size = n, replace = TRUE, prob = probabilitati)
+    u=runif(1)
+    suma=0
+    for(i in length(probabilitati)) {
+      suma=suma+probabilitati[i]
+      if(u<suma)
+        return(valori[i])
+    }
   }
+  else
+    print("eroare")
 }
 
 valori = c(1, 2, 3, 4)
 probabilitati = c(0.1, 0.2, 0.4, 0.3)
-n = 10000
-val_obt = simulare_var_finita(valori, probabilitati, n)
-print(val_obt)
+simulare_var_finita(valori, probabilitati)
