@@ -1,0 +1,50 @@
+#exII.6
+selection_mean_2 <- function(filename,alfa,sigma) { 
+  x = scan(filename) 
+  l=length(x) #dimensiune esantion
+  critical_z = qnorm(1 - alfa/2, 0, 1) 
+  sample_mean=mean(x)
+  a = sample_mean - critical_z*sigma/sqrt(l) 
+  b = sample_mean + critical_z*sigma/sqrt(l) 
+  interval = c(a, b) 
+  return(interval)
+} 
+selection_mean_2("history.txt",0.05,5)
+
+
+
+
+
+#exIII.4
+t_conf_interval_4 <- function(filename,alfa){
+  x=scan(filename)
+  n=length(x)
+  s=sd(x)
+  se = s/sqrt(n)
+  critical_t = qt(1 - alfa/2, n - 1) 
+  sample_mean=mean(x)
+  a =sample_mean - critical_t*se 
+  b =sample_mean + critical_t*se 
+  interval = c(a, b) 
+  return(interval)
+} 
+t_conf_interval_4("history.txt",0.05)
+t_conf_interval_4("history.txt",0.01)
+
+
+
+
+#exIV.2
+test_proportion <- function(alfa,n,succese,p0,tip){
+  p_prim = succese/n 
+  z_score = (p_prim- p0)/sqrt(p0*(1- p0)/n) 
+  if(tip=='r')
+      critical_z = qnorm(1-alfa)
+  if(tip=='l')
+    critical_z = qnorm(alfa)
+  if(tip=='s')
+    critical_z = qnorm(1- alfa/2)
+  interval=c(z_score,critical_z)
+  return(interval)
+}
+test_proportion(0.05,150,20,0.1,'r')
