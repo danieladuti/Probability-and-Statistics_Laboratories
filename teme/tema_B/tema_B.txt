@@ -1,0 +1,171 @@
+#ex. B1
+
+torus_volume = function(N) {
+  R = 10
+  r = 3
+  NC = 0
+  for(i in 1:N) {
+    x = runif(1, min = -(R + r), max = R + r)
+    y = runif(1, min = -(R + r), max = R + r)
+    z = runif(1, min = -r, max = r)
+    if(z^2 + (sqrt(x^2 + y^2) - R)^2 <= r^2) {
+      NC = NC + 1
+    }
+  }
+  cube_volume = (2 * (R + r))^2 * (2 * r)
+  estimated_volume = (NC / N) * cube_volume
+  return(estimated_volume)
+}
+
+actual_volume = 2 * pi^2 * R * r^2
+sample_sizes = c(10000, 50000, 100000)
+results = data.frame(N = sample_sizes, Estimated_Volume = NA, Absolute_Error = NA, Relative_Error = NA)
+
+for(i in 1:3) {
+  N = sample_sizes[i]
+  estimated_volume = torus_volume(N)
+  abs_error = abs(estimated_volume - actual_volume)
+  rel_error = abs_error / actual_volume
+  results$Estimated_Volume[i] = estimated_volume
+  results$Absolute_Error[i] = abs_error
+  results$Relative_Error[i] = rel_error
+}
+
+print(results)
+
+
+
+
+
+
+#ex. B2
+
+triangle_area = function(N) {
+  a = 0
+  b = 2
+  c = 0
+  d = 6
+  NC = 0
+  for(i in 1:N) {
+    x = runif(1, min = a, max = b)
+    y = runif(1, min = c, max = d)
+    if(y >= 0 & y <= 2 * x & y <= 6 - 3 * x) {
+      NC = NC + 1
+    }
+  }
+  rectangle_area = (b - a) * (d - c)
+  estimated_area = (NC / N) * rectangle_area
+  return(estimated_area)
+}
+
+N = 20000
+estimated_triangle_area = triangle_area(N)
+estimated_triangle_area
+
+
+
+
+
+
+#ex. B3
+
+#functie generala
+MC_integration = function(f, a, b, N) {
+  sum = 0
+  for(i in 1:N) {
+    u = runif(1, a, b)
+    sum = sum + f(u)
+  }
+  return((b - a) * sum / N)
+}
+
+
+
+#a.
+integral_a = function(N) {
+  f_a = function(x) {
+    (2 * x - 1) / (x^2 - x - 6)
+  }
+  a = -1
+  b = 1
+  MC_integration(f_a, a, b, N)
+}
+
+N = 20000
+estimated_value_a = integral_a(N)
+exact_value_a = log(3) - log(2)
+error_a = abs(estimated_value_a - exact_value_a)
+estimated_value_a
+error_a
+
+
+
+
+#b.
+integral_b = function(N) {
+  f_b = function(x) {
+    (x + 4) / (x- 3)^(1/3)
+  }
+  a = 3
+  b = 11
+  MC_integration(f_b, a, b, N)
+}
+
+N = 20000
+estimated_value_b = integral_b(N)
+exact_value_b = 61.2
+error_b = abs(estimated_value_b - exact_value_b)
+estimated_value_b
+error_b
+
+
+
+
+#c.
+integral_c = function(N) {
+  f_c = function(x) {
+    x*exp(-x^2)
+  }
+  a = 0
+  b = 100000 #infinit
+  MC_integration(f_c, a, b, N)
+}
+
+N = 20000
+estimated_value_c = integral_c(N)
+exact_value_c = 1/2
+error_c = abs(estimated_value_c - exact_value_c)
+estimated_value_c
+error_c
+
+
+
+
+
+
+#ex. B4
+
+n = 10000
+p = 0.25
+q = 0.01
+
+#a.
+expected_years = (15000 - n) / (n * p)
+expected_years
+
+
+
+#b.
+mean_users = n * (40 + 10/12) * p
+sd_users = sqrt(n * (40 + 10/12) * p * (1 - p))
+prob_at_least_15000 = 1 - pnorm(15000 - 0.5, mean_users, sd_users)
+prob_at_least_15000
+
+
+
+#c.
+mean = n * years * p
+sd = sqrt(n * years * p * (1 - p))
+z = qnorm(0.99)
+error_margin = z * sd / sqrt(n * years)
+error_margin
